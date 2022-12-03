@@ -6,7 +6,7 @@ function BtnShowPassword({ showPassword, handleOnClickShowPassword }) {
   return (
     <button
       type="button"
-      className="inline-block basis-2/12 rounded-md px-2 py-3 bg-gray-200 text-xs uppercase text-gray-700 hover:bg-gray-300"
+      className="inline-block basis-2/12 rounded-md px-2 py-2 bg-gray-200 text-sm uppercase text-gray-700 hover:bg-gray-300"
       onClick={handleOnClickShowPassword}
     >
       {showPassword ? "Hide" : "Show"}
@@ -20,10 +20,12 @@ export default function LoginForm() {
   const handleOnClickShowPassword = function () {
     setShowPassword(!showPassword);
   };
+
   const {
     register,
     handleSubmit,
     watch,
+    getFieldState,
     formState: { errors },
   } = useForm({ criteriaMode: "all" });
 
@@ -84,6 +86,11 @@ export default function LoginForm() {
     );
   };
 
+  const getFieldStateValid = function (field) {
+    if (getFieldState(field).error) return "border-red-300 border-2";
+    else return "border-gray-300";
+  };
+
   return (
     <div className="bg-white px-8 py-7 rounded-md shadow-md mb-3">
       <div className="w-full">
@@ -99,7 +106,9 @@ export default function LoginForm() {
             <input
               type="text"
               id="email"
-              className="form-input mb-2 placeholder:text-gray-400 placeholder:font-light text-sm w-full border-gray-300 rounded-md focus:border-indigo-600"
+              className={`form-input mb-2 placeholder:text-gray-400 placeholder:font-light text-sm w-full ${getFieldStateValid(
+                "email"
+              )} rounded-md focus:border-indigo-600`}
               placeholder="email@abc.com"
               {...register("email", {
                 required: "This is required",
@@ -168,7 +177,9 @@ export default function LoginForm() {
               <input
                 type={!showPassword ? "password" : "text"}
                 id="password"
-                className="form-input text-sm w-full basis-10/12 border-gray-300 rounded-md focus:border-indigo-600"
+                className={`form-input inline-block placeholder:text-gray-400 placeholder:font-light text-sm w-full rounded-md ${getFieldStateValid(
+                  "password"
+                )} focus:border-indigo-600`}
                 {...register("password", {
                   required: "This is required",
                   pattern: {
@@ -223,7 +234,9 @@ export default function LoginForm() {
               <input
                 type={!showPassword ? "password" : "text"}
                 id="reTypePassword"
-                className="form-input text-sm w-full basis-10/12 border-gray-300 rounded-md focus:border-indigo-600"
+                className={`form-input placeholder:text-gray-400 placeholder:font-light text-sm w-full ${getFieldStateValid(
+                  "reTypePassword"
+                )} rounded-md focus:border-indigo-600`}
                 {...register("reTypePassword", {
                   required: "This is required",
                   validate: (val) => {
